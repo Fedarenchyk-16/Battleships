@@ -75,7 +75,55 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Multiplayer
   function startMultiPlayer() {
-    const socket = io();
+    var socket = io.connect();
+
+    // У каждого пользователя будет случайный стиль для блока с сообщенями,
+    // поэтому в этом кусочке кода мы получаем случайные числа
+    var min = 1;
+    var max = 6;
+    var random = Math.floor(Math.random() * (max - min)) + min;
+
+    // Устаналиваем класс в переменную в зависимости от случайного числа
+    // Эти классы взяты из Bootstrap стилей
+    var alertClass;
+    switch (random) {
+      case 1:
+        alertClass = 'secondary';
+        break;
+      case 2:
+        alertClass = 'danger';
+        break;
+      case 3:
+        alertClass = 'success';
+        break;
+      case 4:
+        alertClass = 'warning';
+        break;
+      case 5:
+        alertClass = 'info';
+        break;
+      case 6:ç
+        alertClass = 'light';
+        break;
+    }
+
+    $(function(){
+      //var socket = io.connect();
+      var $form = $("#messForm");
+      var $name = $("#name");
+      var $textarea = $("#message");
+      var $all_messages = $("#all_mess");
+
+      $form.submit(function (event){
+        event.preventDefault();
+        socket.emit("send mess", {mess: $textarea.val(), name: $name.val(), className: alertClass});
+        $textarea.val('');
+      })
+
+      socket.on("add mess", function(data){
+        $all_messages.append("<div class='alert alert-" + data.className + "'><b>" + data.name + "</b>: " + data.mess + "</div>");
+      });
+    });
 
     // Get your player number
     socket.on('player-number', num => {

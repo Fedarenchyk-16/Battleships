@@ -2,8 +2,11 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Battle Ships</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Montserrat&display=swap" rel="stylesheet">
     <script>
       let gameMode = 'multiPlayer'
@@ -12,7 +15,19 @@
     <script src="app.js" charset="utf-8"></script>
   </head>
   <body>
-    <div class="container">
+  <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+    <h5 class="my-0 mr-md-auto font-weight-normal">Anonymous battleships</h5>
+    <nav class="my-2 my-md-0 mr-md-3">
+      <a class="btn btn-outline-primary" href="#">About project</a>
+      <a class="btn btn-outline-primary" href="#">Support</a>
+      <!--        <a class="p-2 text-dark" href="#">About project</a>-->
+      <!--        <a class="p-2 text-dark" href="#">Enterprise</a>-->
+      <!--        <a class="p-2 text-dark" href="#">Support</a>-->
+      <!--        <a class="p-2 text-dark" href="#">Pricing</a>-->
+    </nav>
+    <!--    <a class="btn btn-outline-primary" href="#">About project</a>-->
+  </div>
+    <div class="game-container">
       <div class="player p1">
         Player 1
         <div class="connected">Connected</div>
@@ -26,12 +41,12 @@
       </div>
     </div>
 
-    <div class="container">
+    <div class="game-container">
       <div class="battleship-grid grid-user"></div>
       <div class="battleship-grid grid-computer"></div>
     </div>
 
-    <div class="container hidden-info">
+    <div class="game-container hidden-info">
       <div class="setup-buttons" id="setup-buttons">
         <button id="start" class="btn">Start Game</button>
         <button id="rotate" class="btn">Rotate Your Ships</button>
@@ -40,7 +55,7 @@
       <h3 id="info" class="info-text"></h3>
     </div>
 
-    <div class="container">
+    <div class="game-container">
       <div class="grid-display">
         <div class="ship destroyer-container" draggable="true"><div id="destroyer-0"></div><div id="destroyer-1"></div></div>
         <div class="ship submarine-container" draggable="true"><div id="submarine-0"></div><div id="submarine-1"></div><div id="submarine-2"></div></div>
@@ -49,5 +64,32 @@
         <div class="ship carrier-container" draggable="true"><div id="carrier-0"></div><div id="carrier-1"></div><div id="carrier-2"></div><div id="carrier-3"></div><div id="carrier-4"></div></div>
       </div>
     </div>
+  <div class="container">
+    <div class="py-5 text-center">
+      <h2>Чат программа</h2>
+      <p class="lead">Укажите ваше имя и начинайте переписку</p>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <h3>Форма сообщений</h3>
+        <form id="messForm">
+          <label for="message">Имя</label>
+          <input type="text" name="name" id="name" placeholder="Введите имя" class="form-control">
+          <br>
+          <label for="message">Сообщение</label>
+          <textarea name="message" id="message" class="form-control" placeholder="Введите сообщение"></textarea>
+          <br>
+          <input type="submit" value="Отправить" class="btn btn-danger">
+        </form>
+      </div>
+      <div class="col-6">
+        <h3>
+          Сообщения
+        </h3>
+        <div id="all_mess"></div>
+      </div>
+    </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   </body>
 </html>

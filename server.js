@@ -15,6 +15,36 @@ server.listen(PORT, () => console.log(`Server running on port ${PORT}`))
 
 // Handle a socket connection request from web client
 const connections = [null, null]
+var players = {}, unmatched;
+
+function joinGame(socket){
+  //console.log(socket.id);
+  players[socket.id] = {
+    opponent: unmatched,
+
+    symbol: "X",
+    // The socket that is associated with this player
+    socket: socket,
+  };
+
+  if (unmatched) {
+    players[socket.id].symbol = "O";
+    players[unmatched].opponent = socket.id;
+    unmatched = null;
+  } else {
+    unmatched = socket.id;
+  }
+}
+
+function getOpponent(socket) {
+  //console.log("in getopponent");
+  if (!players[socket.id].opponent) {
+    //console.log("in getopponent if");
+    return;
+  }
+  //console.log("in getopponent else");
+  return players[players[socket.id].opponent].socket;
+};
 
 io.on('connection', socket => {
   // console.log('New WS Connection')
@@ -26,6 +56,18 @@ io.on('connection', socket => {
       playerIndex = i
       break
     }
+  }
+
+  joinGame(socket);
+
+  if (getOpponent(socket)) {
+    //console.log("in the if");
+    socket.emit("game.begin", {
+      symbol: players[socket.id].symbol,
+    });
+    getOpponent(socket).emit("game.begin", {
+      symbol: players[getOpponent(socket).id].symbol,
+    });
   }
 
   // Tell the connecting client what player number they are
@@ -54,6 +96,12 @@ io.on('connection', socket => {
     socket.broadcast.emit('enemy-ready', playerIndex)
     connections[playerIndex] = true
   })
+
+  socket.on("send mess", function(data){
+    console.log("отправляю");
+    io.to(getOpponent(socket).id).emit('add mess', {mess: data.mess, name: data.name, className: data.className})
+  });
+
 
   // Check player connections
   socket.on('check-players', () => {
