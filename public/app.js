@@ -116,12 +116,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
       $form.submit(function (event){
         event.preventDefault();
-        socket.emit("send mess", {mess: $textarea.val(), name: $name.val(), className: alertClass});
+        socket.emit("send mess", {mess: $textarea.val(), className: alertClass});
         $textarea.val('');
       })
 
-      socket.on("add mess", function(data){
-        $all_messages.append("<div class='alert alert-" + data.className + "'><b>" + data.name + "</b>: " + data.mess + "</div>");
+      socket.on("add mess", function(data, name){
+        const div = document.createElement('div');
+        div.classList.add('message');
+        div.innerHTML = `<p class="meta">${name} <span>${data.time}</span></p>
+    <p class="text">${data.mess}</p>`;
+        document.querySelector('.chat-messages').appendChild(div);
+        //$all_messages.append("<div class='alert alert-" + data.className + "'><b>" + data.name + "</b>: " + data.mess + "</div>");
       });
     });
 

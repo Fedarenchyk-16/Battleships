@@ -1,11 +1,12 @@
 const express = require('express')
 const path = require('path')
 const http = require('http')
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 8000
 const socketio = require('socket.io')
 const app = express()
 const server = http.createServer(app)
 const io = socketio(server)
+var moment = require('moment'); // require
 
 // Set static folder
 app.use(express.static(path.join(__dirname, "public")))
@@ -98,10 +99,10 @@ io.on('connection', socket => {
   })
 
   socket.on("send mess", function(data){
-    console.log("отправляю");
-    io.to(getOpponent(socket).id).emit('add mess', {mess: data.mess, name: data.name, className: data.className})
+    //io.to(getOpponent(socket).id).emit('add mess', {mess: data.mess, name: data.name, className: data.className})
+    io.to(getOpponent(socket).id).emit('add mess', {mess: data.mess, time: moment().format('h:mm a')}, 'Opponent')
+    io.to(socket.id).emit('add mess', {mess: data.mess, time: moment().format('h:mm a')}, 'You')
   });
-
 
   // Check player connections
   socket.on('check-players', () => {
