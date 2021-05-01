@@ -14,7 +14,8 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="app.js" charset="utf-8"></script>
   </head>
-  <body>
+  <body id="body">
+  <div id="outer">
   <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
     <h5 class="my-0 mr-md-auto font-weight-normal">Anonymous battleships</h5>
     <nav class="my-2 my-md-0 mr-md-3">
@@ -51,9 +52,10 @@
         <button id="start" class="btn btn-danger">Start Game</button>
         <button id="rotate" class="btn btn-danger">Rotate Your Ships</button>
       </div>
-      <div class="alert alert-primary p-1 mt-3 px-5" role="alert" style="width: 400px; text-align: center">
-        <h3 id="whose-go" class="info-text">Your Go</h3>
-        <h3 id="info" class="info-text"></h3>
+      <div class="alert alert-primary p-1 mt-3 px-5" role="alert" style="width: 800px; text-align: center">
+        <h3 id="whose-go" class="info-text">Preparing for a game</h3>
+        <hr>
+        <h3 id="info" class="info-text">Information will be here...</h3>
       </div>
     </div>
 
@@ -74,7 +76,7 @@
       <div class="col-6">
         <h3>Message form</h3>
         <form id="messForm">
-          <textarea name="message" id="message" class="form-control" placeholder="Input text..."></textarea>
+          <textarea name="message" id="message" class="form-control" placeholder="Input text..." style="resize: none"></textarea>
           <br>
           <input type="submit" value="Send" class="btn btn-danger">
         </form>
@@ -83,9 +85,10 @@
         <h3>
           History
         </h3>
-        <div id="all_mess" class="chat-messages" style="overflow: scroll; height: 300px"></div>
+        <div id="all_mess" class="chat-messages" style="overflow: scroll; height: 300px; padding: 10px"></div>
       </div>
     </div>
+  </div>
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   </body>

@@ -74,6 +74,8 @@ io.on('connection', socket => {
   // Tell the connecting client what player number they are
   socket.emit('player-number', playerIndex)
 
+  socket.emit('checkForOpponent', players[socket.id].opponent);
+
   console.log(`Player ${playerIndex} has connected`)
 
   // Ignore player 3
@@ -99,9 +101,14 @@ io.on('connection', socket => {
   })
 
   socket.on("send mess", function(data){
-    //io.to(getOpponent(socket).id).emit('add mess', {mess: data.mess, name: data.name, className: data.className})
-    io.to(getOpponent(socket).id).emit('add mess', {mess: data.mess, time: moment().format('h:mm a')}, 'Opponent')
-    io.to(socket.id).emit('add mess', {mess: data.mess, time: moment().format('h:mm a')}, 'You')
+    if (getOpponent(socket) !== undefined) {
+      //io.to(getOpponent(socket).id).emit('add mess', {mess: data.mess, name: data.name, className: data.className})
+      io.to(getOpponent(socket).id).emit('add mess', {mess: data.mess, time: moment().format('h:mm a')}, 'Opponent')
+      io.to(socket.id).emit('add mess', {mess: data.mess, time: moment().format('h:mm a')}, 'You')
+      io.emit('clear-area', true);
+    }else{
+      io.emit('clear-area', false);
+    }
   });
 
   // Check player connections

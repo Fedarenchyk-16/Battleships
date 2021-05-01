@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
       case 5:
         alertClass = 'info';
         break;
-      case 6:ç
+      case 6:
         alertClass = 'light';
         break;
     }
@@ -117,7 +117,15 @@ document.addEventListener('DOMContentLoaded', () => {
       $form.submit(function (event){
         event.preventDefault();
         socket.emit("send mess", {mess: $textarea.val(), className: alertClass});
-        $textarea.val('');
+      })
+
+      socket.on('clear-area', bool => {
+        if (bool){
+          $textarea.val('');
+        }else{
+          console.log('no');
+          infoDisplay.innerHTML = 'There is no one to send a message';
+        }
       })
 
       socket.on("add mess", function(data, name){
@@ -126,6 +134,8 @@ document.addEventListener('DOMContentLoaded', () => {
         div.innerHTML = `<p class="meta">${name} <span>${data.time}</span></p>
     <p class="text">${data.mess}</p>`;
         document.querySelector('.chat-messages').appendChild(div);
+        objDiv = document.querySelector('.chat-messages');
+        objDiv.scrollTop = objDiv.scrollHeight;
         //$all_messages.append("<div class='alert alert-" + data.className + "'><b>" + data.name + "</b>: " + data.mess + "</div>");
       });
     });
@@ -133,7 +143,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Get your player number
     socket.on('player-number', num => {
       if (num === -1) {
-        infoDisplay.innerHTML = "Sorry, the server is full"
+        infoDisplay.innerHTML = "Sorry, the server is full";
+        showFullMessage();
       } else {
         playerNum = parseInt(num)
         if(playerNum === 1) currentPlayer = "enemy"
@@ -144,6 +155,19 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('check-players')
       }
     })
+
+    function showFullMessage(){
+      let body = document.getElementById('body');
+      let outer = document.getElementById('outer');
+      outer.remove();
+
+      let container = document.createElement('div');
+      container.classList.add('container');
+      container.classList.add('fullInfo');
+      container.innerText = "🥺 Sorry, server is full.\n Try again later."
+
+      body.appendChild(container);
+    }
 
     // Another player has connected or disconnected
     socket.on('player-connection', num => {
@@ -575,6 +599,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Game Logic for MultiPlayer
   function playGameMulti(socket) {
+    let info = document.getElementById('info');
     setupButtons.style.display = 'none'
     if(isGameOver) return
     if(!ready) {
@@ -585,11 +610,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if(enemyReady) {
       if(currentPlayer === 'user') {
-        turnDisplay.innerHTML = 'Your Go'
+        turnDisplay.innerHTML = 'Your Go';
+        // info.innerText = "Information will be here...";
       }
       if(currentPlayer === 'enemy') {
-        turnDisplay.innerHTML = "Enemy's Go"
+        turnDisplay.innerHTML = "Enemy's Go";
+        // info.innerText = "Information will be here...";
       }
+    }else{
+      info.innerText = "Waiting for opponent...";
     }
   }
 
@@ -667,43 +696,43 @@ document.addEventListener('DOMContentLoaded', () => {
     let enemy = 'computer'
     if(gameMode === 'multiPlayer') enemy = 'enemy'
     if (destroyerCount === 2) {
-      infoDisplay.innerHTML = `You sunk the ${enemy}'s destroyer`
+      infoDisplay.innerHTML = `You sunk the ${enemy}'s destroyer 👍⚓️🛳`
       destroyerCount = 10
     }
     if (submarineCount === 3) {
-      infoDisplay.innerHTML = `You sunk the ${enemy}'s submarine`
+      infoDisplay.innerHTML = `You sunk the ${enemy}'s submarine 👍⚓️🛳`
       submarineCount = 10
     }
     if (cruiserCount === 3) {
-      infoDisplay.innerHTML = `You sunk the ${enemy}'s cruiser`
+      infoDisplay.innerHTML = `You sunk the ${enemy}'s cruiser 👍⚓️🛳`
       cruiserCount = 10
     }
     if (battleshipCount === 4) {
-      infoDisplay.innerHTML = `You sunk the ${enemy}'s battleship`
+      infoDisplay.innerHTML = `You sunk the ${enemy}'s battleship 👍⚓️🛳`
       battleshipCount = 10
     }
     if (carrierCount === 5) {
-      infoDisplay.innerHTML = `You sunk the ${enemy}'s carrier`
+      infoDisplay.innerHTML = `You sunk the ${enemy}'s carrier 👍⚓️🛳`
       carrierCount = 10
     }
     if (cpuDestroyerCount === 2) {
-      infoDisplay.innerHTML = `${enemy} sunk your destroyer`
+      infoDisplay.innerHTML = `${enemy} sunk your destroyer ‼️⚠️🔥`
       cpuDestroyerCount = 10
     }
     if (cpuSubmarineCount === 3) {
-      infoDisplay.innerHTML = `${enemy} sunk your submarine`
+      infoDisplay.innerHTML = `${enemy} sunk your submarine ‼️⚠️🔥`
       cpuSubmarineCount = 10
     }
     if (cpuCruiserCount === 3) {
-      infoDisplay.innerHTML = `${enemy} sunk your cruiser`
+      infoDisplay.innerHTML = `${enemy} sunk your cruiser ‼️⚠️🔥`
       cpuCruiserCount = 10
     }
     if (cpuBattleshipCount === 4) {
-      infoDisplay.innerHTML = `${enemy} sunk your battleship`
+      infoDisplay.innerHTML = `${enemy} sunk your battleship ‼️⚠️🔥`
       cpuBattleshipCount = 10
     }
     if (cpuCarrierCount === 5) {
-      infoDisplay.innerHTML = `${enemy} sunk your carrier`
+      infoDisplay.innerHTML = `${enemy} sunk your carrier ‼️⚠️🔥`
       cpuCarrierCount = 10
     }
 
