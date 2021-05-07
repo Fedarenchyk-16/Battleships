@@ -24,13 +24,33 @@ body {
 
 .splash-battleship-image {
   position: absolute;
-  bottom: 5vh;
-  left: 20vw;
-  width: 100%;
+  bottom: 20vh;
+  left: 40vw;
+  width: 20%;
   transform: rotateY(180deg);
   pointer-events: none;
   opacity: .25;
 }
+
+.bullet-image{
+  position: absolute;
+  bottom: 60vh;
+  left: 70vw;
+  width: 10%;
+  transform: rotateY(180deg);
+  pointer-events: none;
+  opacity: .25;
+}
+
+.bullet-image-rotate{
+  position: absolute;
+  bottom: 60vh;
+  left: 20vw;
+  width: 10%;
+  pointer-events: none;
+  opacity: .25;
+}
+
 
 .btn {
   font-size: inherit;

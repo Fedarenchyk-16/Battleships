@@ -24,6 +24,10 @@ document.addEventListener('DOMContentLoaded', () => {
   let enemyReady = false
   let allShipsPlaced = false
   let shotFired = -1
+  let matr;
+  let myMatrOfShips;
+
+  let score = 0;
   //Ships
   const shipArray = [
     {
@@ -207,6 +211,11 @@ document.addEventListener('DOMContentLoaded', () => {
       else infoDisplay.innerHTML = "Please place all ships"
     })
 
+    // document.getElementById('start').addEventListener('click', () => {
+    //   if(allShipsPlaced) playGameMulti(socket)
+    //   else infoDisplay.innerHTML = "Please place all ships"
+    // })
+
     // Setup event listeners for firing
     computerSquares.forEach(square => {
       square.addEventListener('click', () => {
@@ -247,8 +256,12 @@ document.addEventListener('DOMContentLoaded', () => {
     generate(shipArray[4])
 
     startButton.addEventListener('click', () => {
-      setupButtons.style.display = 'none'
-      playGameSingle()
+      if(allShipsPlaced){
+        setupButtons.style.display = 'none'
+        playGameSingle()
+      } else {
+        infoDisplay.innerHTML = "Please place all ships"
+      }
     })
   }
 
@@ -321,9 +334,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return false;
   }
 
-  let matr = matrix(10, 10);
-  let myMatrOfShips = matrix(10, 10);
-
   //Create Board
   function createBoard(grid, squares) {
     for (let i = 0; i < width*width; i++) {
@@ -332,6 +342,8 @@ document.addEventListener('DOMContentLoaded', () => {
       grid.appendChild(square)
       squares.push(square)
     }
+    matr = matrix(10, 10);
+    myMatrOfShips = matrix(10, 10);
   }
 
   //Draw the computers ships in random locations
@@ -652,18 +664,44 @@ document.addEventListener('DOMContentLoaded', () => {
   function revealSquare(classList) {
     const enemySquare = computerGrid.querySelector(`div[data-id='${shotFired}']`)
     const obj = Object.values(classList)
+    // if (currentPlayer === 'user' && !isGameOver) {
     if (!enemySquare.classList.contains('boom') && currentPlayer === 'user' && !isGameOver) {
-      if (obj.includes('destroyer')) destroyerCount++
-      if (obj.includes('submarine')) submarineCount++
-      if (obj.includes('cruiser')) cruiserCount++
-      if (obj.includes('battleship')) battleshipCount++
-      if (obj.includes('carrier')) carrierCount++
+      console.log(obj);
+      if (obj.includes('destroyer') && obj.includes('taken')){
+        destroyerCount++
+        infoDisplay.innerHTML = "add destroyer"
+      }
+      if (obj.includes('submarine') && obj.includes('taken')) {
+        submarineCount++
+        infoDisplay.innerHTML = "add submarine"
+      }
+      if (obj.includes('cruiser') && obj.includes('taken')){
+        cruiserCount++
+        infoDisplay.innerHTML = "add cruiser"
+      }
+      if (obj.includes('battleship') && obj.includes('taken')){
+        battleshipCount++
+        infoDisplay.innerHTML = "add battleship"
+      }
+      if (obj.includes('carrier') && obj.includes('taken')){
+        carrierCount++
+        infoDisplay.innerHTML = "add carrier"
+      }
     }
-    if (obj.includes('taken')) {
+    console.log(score);
+    if (obj.includes('taken') && !obj.includes('boom')) {
       enemySquare.classList.add('boom')
+      score++;
     } else {
       enemySquare.classList.add('miss')
     }
+
+    // console.log(destroyerCount)
+    // console.log(submarineCount)
+    // console.log(cruiserCount)
+    // console.log(battleshipCount)
+    // console.log(carrierCount)
+
     checkForWins()
     currentPlayer = 'enemy'
     if(gameMode === 'singlePlayer') playGameSingle()
@@ -736,7 +774,7 @@ document.addEventListener('DOMContentLoaded', () => {
       cpuCarrierCount = 10
     }
 
-    if ((destroyerCount + submarineCount + cruiserCount + battleshipCount + carrierCount) === 50) {
+    if ((destroyerCount + submarineCount + cruiserCount + battleshipCount + carrierCount) === 50 || score === 17) {
       infoDisplay.innerHTML = "YOU WIN"
       gameOver()
       showFinishMessage("WOW!🥳 YOU WON THIS GAME!🤟🏻 \n IT'S SO AMAZING! I CAN'T BELIEVE MY EYES!🔥");
