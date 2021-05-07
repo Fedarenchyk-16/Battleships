@@ -713,6 +713,19 @@ document.addEventListener('DOMContentLoaded', () => {
   let cpuBattleshipCount = 0
   let cpuCarrierCount = 0
 
+  document.getElementById('about').addEventListener('click', event => {
+    document.getElementById('popup').style = 'display: block;';
+  })
+
+  document.getElementById('close').addEventListener('click', event => {
+    document.getElementById('popup').style = 'display: none;';
+  })
+
+  window.onclick = e => {
+    if (e.target == popup) {
+      popup.style = 'display: none;';
+    }
+  }
 
   function enemyGo(square) {
     if (gameMode === 'singlePlayer') square = Math.floor(Math.random() * userSquares.length)
