@@ -739,10 +739,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if ((destroyerCount + submarineCount + cruiserCount + battleshipCount + carrierCount) === 50) {
       infoDisplay.innerHTML = "YOU WIN"
       gameOver()
+      showFinishMessage("WOW!🥳 YOU WON THIS GAME!🤟🏻 \n IT'S SO AMAZING! I CAN'T BELIEVE MY EYES!🔥");
     }
     if ((cpuDestroyerCount + cpuSubmarineCount + cpuCruiserCount + cpuBattleshipCount + cpuCarrierCount) === 50) {
       infoDisplay.innerHTML = `${enemy.toUpperCase()} WINS`
       gameOver()
+      showFinishMessage("Ohhh! You lose!🥺 \n Don't worry. Better luck next time.😢")
     }
   }
 
@@ -750,4 +752,18 @@ document.addEventListener('DOMContentLoaded', () => {
     isGameOver = true
     startButton.removeEventListener('click', playGameSingle)
   }
+
+  function showFinishMessage(text){
+    let body = document.getElementById('body');
+    let outer = document.getElementById('outer');
+    outer.remove();
+
+    let container = document.createElement('div');
+    container.classList.add('container');
+    container.classList.add('fullInfo');
+    container.innerText = text;
+
+    body.appendChild(container);
+  }
+
 })
